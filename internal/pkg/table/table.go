@@ -415,6 +415,14 @@ func (t *Table) Select(option ...TableSelectOption) (*Table, error) {
 					}
 				}
 			}
+		case bgp.RF_IPv4_VPN:
+			for _, dst := range t.GetDestinations() {
+				if d := dst.Select(dOption); d != nil {
+					if strings.Contains(d.nlri.String(), prefixes[0].Prefix){
+						r.setDestination(d)
+					}
+				}
+			}
 		default:
 			return nil, fmt.Errorf("route filtering is not supported for this family")
 		}
